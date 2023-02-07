@@ -1,0 +1,12 @@
+Hashing Alg 
+123 - re3$lki
+
+1- Bd$
+2 - fr
+
+refactoring
+error handling 
+mongoose hooks(middleware)
+authentication(session based and token based)
+projecting route using authentication 
+integrating ejs file 

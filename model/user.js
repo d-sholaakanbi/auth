@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const {isEmail} = require("validator");
+const bcrypt = require('bcrypt');
 
 const userAuth = new Schema({
     email: {
@@ -15,9 +16,18 @@ const userAuth = new Schema({
     password: {
         type: String,
         required: [true,'Please enter your password'],
-        minlenght: [10, 'the minimum length of your password is 10']
+        minlength: [10, 'the minimum length of your password is 10']
     }
 }, { timestamps: true}
-)
+);
+
+//mongoose hooks 
+// function that protect user info before we save 
+userAuth.pre('save', async function(next) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+
+});
 
 module.exports = mongoose.model("user", userAuth);
