@@ -35,12 +35,12 @@ const register = async (req,res) => {
         //protect user info 
         //create the user on the database 
         const user = await Users.create({email, password})
-        res.status(201).render({ success: true, data: user })
+        res.status(201).json({ success: true, data: user })
     } catch(error){
   console.log(error)
         //handle error in the catch block
         const errors = handleErrors(error);
-        res.status(400).json({errors})
+        res.status(400).json({ success: false, errors})
     }
 };
 
@@ -56,14 +56,14 @@ const login = async (req, res ) => {
     if (user) {
         const authenticated = await bcrypt.compare(password, user.password);
         if(authenticated) {
-            return res.status(200).render({success: true, data: user})
+            return res.status(200).json({success: true, data: user})
 
         }throw Error('Invalid email or password')
     }
    throw Error ("User not registered yet");
        }catch(error){
         const errors = handleErrors(error);
-        res.status(400).json({errors})
+        res.status(400).json({success: false, errors})
     }
     
 };

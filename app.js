@@ -13,6 +13,7 @@ mongoose.set("strictQuery", true);
 
 // MIDDLEWARE
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 //ROUTES
 app.use(newRouter);

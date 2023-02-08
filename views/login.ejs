@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
 </head>
+<style>
+    .emailError{color: red;}
+    .passwordError{color: red;}
+</style>
 <body>
     <nav>
         <ul>
@@ -12,18 +16,48 @@
             <li><a href="/login">Login</a></li>
             <li><a href="/dashboard">Homepage</a></li>
         </ul>
+        <h1>LOGIN</h1>
     </nav>
-    <form action="/register" method="post">
-            <div>
-                <label for="email">Email</label>
-                <input type="text" id="email" name="email">
-            </div>
-            <div>
-                <label for="password">Password</label>
-                <input type="text" id="password" name="password">
-            </div>
-            <button type="submit">Log In</button>
-         </form>
+    <form>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required/>
+            <div class="emailError"></div>
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required/>
+            <div class="passwordError"></div>
+        </div>
+        <button type="submit">log in</button>
+     </form>
+
+     <script>
+        const form = document.querySelector('form');
+        const emailError = document.querySelector('.emailError');
+        const passwordError = document.querySelector('.passwordError');
+
+        form.addEventListener('submit', async(e) =>{
+            e.preventDefault();
+
+            const email = form.email.value
+            const password = form.password.value
+
+            const res = await fetch("/login",{
+                method: "POST",
+                headers:{'Content-type': 'application/json'},
+                body: JSON.stringify({email,password}),
+            });
+            const result = await res.json();
+            if (result.success){
+                location.assign('/dashboard')       
+            }else{
+                emailError.textContent = result.errors.email;
+                passwordError.textContent = result.errors.password;
+
+            }
+        });
+     </script>
     
 </body>
 </html>

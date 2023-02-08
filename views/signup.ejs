@@ -13,17 +13,47 @@
             <li><a href="/dashboard">Homepage</a></li>
         </ul>
     </nav>
-    <form action="/register" method="post">
+    <h1>SIGN UP</h1>
+    <form>
             <div>
                 <label for="email">Email</label>
-                <input type="text" id="email" name="email">
+                <input type="email" id="email" name="email" required/>
+                <div class="emailError"></div>
             </div>
             <div>
                 <label for="password">Password</label>
-                <input type="text" id="password" name="password">
+                <input type="password" id="password" name="password" required/>
+                <div class="passwordError"></div>
             </div>
             <button type="submit">Sign up</button>
          </form>
+
+         <script>
+            const form = document.querySelector('form');
+            const emailError = document.querySelector('.emailError');
+            const passwordError = document.querySelector('.passwordError');
+
+            form.addEventListener('submit', async(e) =>{
+                e.preventDefault();
+
+                const email = form.email.value
+                const password = form.password.value
+
+                const res = await fetch("/register",{
+                    method: "POST",
+                    headers:{'Content-type': 'application/json'},
+                    body: JSON.stringify({email,password}),
+                });
+                const result = await res.json();
+                if (result.success){
+                    location.assign('/login')
+                }else{
+                    emailError.textContent = result.errors.email;
+                    passwordError.textContent = result.errors.password;
+
+                }
+            });
+         </script>
     
 </body>
 </html>
